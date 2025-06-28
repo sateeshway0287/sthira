@@ -29,7 +29,7 @@ jobs:
       - name: Upload build artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: node-app
+          name: build
           path: build
 
   deploy:
@@ -43,13 +43,11 @@ jobs:
       - name: Download build artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: node-app
+          name: build
+          path: build
 
-      - name: List workspace contents (debug)
-        run: ls -lR
-
-      - name: Rename artifact to 'build' for deployment
-        run: mv node-app build
+      - name: List files in build folder (debug)
+        run: ls -lR build
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -58,7 +56,7 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A178D3E2048948F7959CD48A0CB3C9D3 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_064650B3B811413B817AF24260F3A6B6 }}
 
-      - name: 'Deploy to Azure Web App'
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'sthira'
