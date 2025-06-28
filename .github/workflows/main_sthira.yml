@@ -45,6 +45,12 @@ jobs:
         with:
           name: node-app
 
+      - name: List workspace contents (debug)
+        run: ls -lR
+
+      - name: Rename artifact to 'build' for deployment
+        run: mv node-app build
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -53,9 +59,8 @@ jobs:
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_064650B3B811413B817AF24260F3A6B6 }}
 
       - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'sthira'
           slot-name: 'Production'
-          package: node-app
+          package: build
